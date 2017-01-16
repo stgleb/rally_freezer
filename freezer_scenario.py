@@ -8,15 +8,29 @@ from rally.task import atomic
 class BackupServers(nova_utils.NovaScenario, cinder_utils.CinderScenario):
     """Base class for Freezer scenarios with basic atomic actions."""
     def run(self, **kwargs):
-        server_id = self.context[...]
-        with atomic.ActionTimer(self, "backup_server"):
-            backup = self.clients("freezer").backup_server(server_id)
+        iteration_count = self.context["iteration_count"]
+        step = self.context["step"]
+        server_base_name = self.context["base_name"]
+
+        for i in range(iteration_count):
+            with atomic.ActionTimer(self, "backup_nova"):
+                for j in range(step):
+                    self.clients("freezer").\
+                        backup_nova("{0}+_{1}".format(server_base_name,
+                                                      i * step + j))
 
 
 @osclients.configure(name="BackupServers")
 class BackupVolumes(cinder_utils.CinderScenario):
     """Base class for Freezer scenarios with basic atomic actions."""
     def run(self, **kwargs):
-        server_id = self.context[...]
-        with atomic.ActionTimer(self, "backup_server"):
-            backup = self.clients("freezer").backup_server(server_id)
+        iteration_count = self.context["iteration_count"]
+        step = self.context["step"]
+        server_base_name = self.context["base_name"]
+
+        for i in range(iteration_count):
+            with atomic.ActionTimer(self, "backup_cinder"):
+                for j in range(step):
+                    self.clients("freezer").\
+                        backup_cinder("{0}+_{1}".format(server_base_name,
+                                                        i * step + j))
