@@ -1,10 +1,10 @@
-from rally import osclients
+from rally.task import scenario
 from rally.plugins.openstack.scenarios.nova import utils as nova_utils
 from rally.plugins.openstack.scenarios.cinder import utils as cinder_utils
 from rally.task import atomic
 
 
-@osclients.configure(name="BackupServers")
+@scenario.configure(name="Freezer.backup_servers")
 class BackupServers(nova_utils.NovaScenario, cinder_utils.CinderScenario):
     """Base class for Freezer scenarios with basic atomic actions."""
     def run(self, **kwargs):
@@ -23,7 +23,7 @@ class BackupServers(nova_utils.NovaScenario, cinder_utils.CinderScenario):
                                                       servers[index].name))
 
 
-@osclients.configure(name="BackupServers")
+@scenario.configure(name="Freezer.backup_volumes")
 class BackupVolumes(cinder_utils.CinderScenario):
     """Base class for Freezer scenarios with basic atomic actions."""
     def run(self, **kwargs):

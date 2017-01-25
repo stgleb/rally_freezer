@@ -1,0 +1,21 @@
+---
+  Freezer.backup_servers:
+    -
+      runner:
+        type: "constant"
+        times: 1
+        concurrency: 1
+      context:
+        servers_alt:
+          flavor:
+              name: "m1.nano"
+          image:
+              name: "cirros"
+          servers_per_tenant: 2
+          auto_assign_nic: True
+        users:
+          tenants: 1 
+          users_per_tenant: 1
+      sla:
+        failure_rate:
+          max: 0
